@@ -1,0 +1,34 @@
+#!/usr/bin/env python3
+
+import csv
+def read_employees(csv_file_location):
+        with open(csv_file_location) as file:
+                csv.register_dialect('empDialect',skipinitialspace = True,strict = True)
+                writer = csv.DictReader(file,dialect = 'empDialect')
+                emp_lists = []
+                for data in writer:
+                        emp_lists.append(data)
+                return emp_lists
+
+def process_data(employee_lists):
+        department_list = []
+        for employee_data in employee_lists:
+                department_list.append(employee_data["Department"])
+
+        department_data = {}
+        for department_name in set(department_list):
+                department_data[department_name] = department_list.count(department_name)
+        return department_data
+
+def write_report(dictonary,report_file):
+        with open(report_file,"w+") as f:
+                for k in sorted(dictonary):
+                        f.write(str(k)+':'+str(dictonary[k])+"\n")
+                f.close()
+employee_lists = read_employees("/home/student-04-20edc5704138/data/employee.csv")
+dictonary = process_data(employee_lists)
+write_report(dictonary,"/homestident-04-20edc5704138/data/report.txt")
+
+
+
+#print(employee_lists)
